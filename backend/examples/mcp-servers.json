@@ -1,0 +1,21 @@
+[
+  {
+    "name": "jira",
+    "type": "url",
+    "url": "https://mcp.atlassian.com/v1/sse",
+    "authorization_token": null,
+    "tool_configuration": {
+      "enabled": true
+    },
+    "oauth_provider_configuration": null
+  },
+  {
+    "name": "github",
+    "type": "url", 
+    "url": "https://api.githubcopilot.com/mcp/",
+    "authorization_token": null,
+    "tool_configuration": {
+      "enabled": true
+    }
+  }
+]

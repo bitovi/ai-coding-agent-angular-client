@@ -1,0 +1,165 @@
+[
+  {
+    "name": "hello-world",
+    "mcp_servers": [],
+    "messages": [
+      {
+        "role": "user",
+        "content": "{{greeting}} Claude! Please respond with a friendly greeting and tell me you're working correctly.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "greeting": {
+              "type": "string",
+              "description": "A greeting to send to Claude"
+            }
+          },
+          "required": []
+        }
+      }
+    ]
+  },
+  {
+    "name": "create-jira-issue",
+    "mcp_servers": ["jira"],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Create a Jira issue in the project '{{projectKey}}' with summary '{{summary}}' and description '{{description}}'. Use issue type '{{issueType}}' if specified, otherwise use 'Task'.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "Brief summary of the issue"
+            },
+            "description": {
+              "type": "string", 
+              "description": "Detailed description of the issue"
+            },
+            "issueType": {
+              "type": "string",
+              "description": "Type of issue (Task, Bug, Story, etc.)",
+              "default": "Task"
+            },
+            "projectKey": {
+              "type": "string",
+              "description": "Project key for the Jira project"
+            }
+          },
+          "required": ["summary", "description", "projectKey"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "clone-github-repository",
+    "mcp_servers": [],
+    "connections": {"claude_code": ["git-credentials"]},
+    "messages": [
+        {
+            "role": "user",
+            "content": "Clone the GitHub repository '{{repository}}' to the current working directory using git tools. Make sure to clone it into the current working directory where this process is running, not into any parent directories. If there's already a local copy in the current directory, update it to the latest version by running 'git pull' inside the repository folder. Use https methods that will work with a .git-credentials file.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "repository": {
+                        "type": "string",
+                        "description": "Repository URL or name in format 'owner/repo'. Example: 'bitovi/bitovi-jira-redirect'."
+                    }
+                },
+                "required": ["repository"]
+            }
+        }
+        ]
+  },
+  {
+    "name": "analyze-repository",
+    "mcp_servers": ["github"],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Analyze the GitHub repository '{{repository}}' and provide insights about its structure, recent activity, and potential improvements.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "type": "string",
+              "description": "Repository name in format 'owner/repo'"
+            }
+          },
+          "required": ["repository"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "code-review",
+    "mcp_servers": ["github"],
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are an expert code reviewer. Analyze the provided code and give constructive feedback."
+      },
+      {
+        "role": "user",
+        "content": "Please review the code in {{filePath}} and provide feedback on code quality, potential issues, and suggested improvements.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "filePath": {
+              "type": "string",
+              "description": "Path to the file to review"
+            }
+          },
+          "required": ["filePath"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "project-status-report",
+    "mcp_servers": ["jira", "github"],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Generate a project status report for {{projectKey}}. Include information from both Jira issues and GitHub repository activity. Focus on progress over the last {{timeframe}} days.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "projectKey": {
+              "type": "string",
+              "description": "Jira project key or GitHub repository"
+            },
+            "timeframe": {
+              "type": "number",
+              "description": "Number of days to look back",
+              "default": 7
+            }
+          },
+          "required": ["projectKey"]
+        }
+      }
+    ]
+  },
+  {
+    "name": "git-status-and-commit",
+    "mcp_servers": [],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Check the git status of the current repository and commit any staged changes with the message '{{commitMessage}}'. If no changes are staged, stage all modified files first. Use the built-in git tools available in the workspace.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "commitMessage": {
+              "type": "string",
+              "description": "Message for the git commit"
+            }
+          },
+          "required": ["commitMessage"]
+        }
+      }
+    ]
+  }
+]

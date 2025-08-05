@@ -1,0 +1,73 @@
+{
+  "name": "ai-coding-agent",
+  "version": "1.0.0",
+  "description": "an ai coding agent",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "npx tsx index.ts",
+    "start:prod": "npm run build && npm start",
+    "dev": "npx tsx --watch index.ts",
+    "dev-no-auth": "DISABLE_AUTH=true npx tsx --watch index.ts",
+    "start-no-auth": "DISABLE_AUTH=true npx tsx index.ts",
+    "build": "tsc",
+    "build:backend": "tsc",
+    "dev:ts": "ts-node --esm",
+    "validate": "npx tsx scripts/validate-config.js",
+    "test-connections": "npx tsx scripts/test-connections.js",
+    "test-git": "npx tsx scripts/test-git-credentials.js",
+    "test-claude-code": "node tests/test-claude-code-basic.js",
+    "test-claude-integration": "node tests/test-claude-service-integration.js",
+    "start-claude-code": "CLAUDE_SERVICE=CLAUDECODE npx tsx index.ts",
+    "dev-claude-code": "CLAUDE_SERVICE=CLAUDECODE npx tsx --watch index.ts",
+    "start-claude-code-sdk": "CLAUDE_SERVICE=CLAUDECODESDK npx tsx index.ts",
+    "dev-claude-code-sdk": "CLAUDE_SERVICE=CLAUDECODESDK npx tsx --watch index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitovi/ai-coding-agent.git"
+  },
+  "keywords": [
+    "ai",
+    "coding",
+    "agent"
+  ],
+  "author": "Bitovi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bitovi/ai-coding-agent/issues"
+  },
+  "homepage": "https://github.com/bitovi/ai-coding-agent#readme",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.64",
+    "@anthropic-ai/sdk": "^0.30.1",
+    "@cyanheads/git-mcp-server": "^2.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "fs-extra": "^11.2.0",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.15",
+    "open": "^10.1.0",
+    "openid-client": "^5.6.5",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.19.9",
+    "concurrently": "^8.2.0",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  },
+  "directories": {
+    "example": "examples",
+    "test": "tests"
+  }
+}
