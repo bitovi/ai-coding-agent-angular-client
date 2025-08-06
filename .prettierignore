@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build outputs
+dist
+coverage
+.angular
+
+# Generated files
+*.log
+.DS_Store
+
+# Agent output - these are documentation files we don't want to reformat
+agent-output/
+
+# Backend legacy files (keep original formatting for now)
+backend/public/
+backend/tests/
+
+# Images and binaries
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.svg
+*.pdf
+
+# Environment files
+.env
+.env.*
