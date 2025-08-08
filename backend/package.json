@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "npx tsx index.ts",
+    "start": "npx tsx --watch index.ts",
     "start:prod": "npm run build && npm start",
     "dev": "npx tsx --watch index.ts",
     "dev-no-auth": "DISABLE_AUTH=true npx tsx --watch index.ts",

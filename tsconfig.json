@@ -2,29 +2,28 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "checkJs": false,
-    "outDir": "./dist",
-    "rootDir": "./",
-    "strict": false,
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true
+    "allowJs": true,
+    "checkJs": false
   },
-  "include": [
-    "src/**/*",
-    "backend/index.ts"
-  ],
   "exclude": [
     "node_modules",
     "dist",
-    "tests",
     "**/*.test.ts",
-    "**/*.test.js"
+    "**/*.test.js",
+    "**/*.spec.ts"
   ]
 }

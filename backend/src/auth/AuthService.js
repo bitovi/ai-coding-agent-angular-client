@@ -7,7 +7,7 @@ export class AuthService {
   constructor(emailService) {
     this.emailService = emailService;
     this.sessionManager = new SessionManager();
-    
+
     // List of authorized email addresses (for simple access control)
     this.authorizedEmails = this.parseAuthorizedEmails();
   }
@@ -19,8 +19,8 @@ export class AuthService {
     const emails = process.env.AUTHORIZED_EMAILS || process.env.EMAIL || '';
     return emails
       .split(',')
-      .map(email => email.trim().toLowerCase())
-      .filter(email => email.length > 0);
+      .map((email) => email.trim().toLowerCase())
+      .filter((email) => email.length > 0);
   }
 
   /**
@@ -29,7 +29,9 @@ export class AuthService {
   isEmailAuthorized(email) {
     if (this.authorizedEmails.length === 0) {
       // If no authorized emails configured, allow any email (development mode)
-      console.warn('⚠️  No AUTHORIZED_EMAILS configured - allowing all email addresses');
+      console.warn(
+        '⚠️  No AUTHORIZED_EMAILS configured - allowing all email addresses'
+      );
       return true;
     }
 
@@ -52,7 +54,11 @@ export class AuthService {
       // For security, don't reveal whether email is authorized or not
       // Just say we sent a link (but don't actually send it)
       console.warn(`🚫 Unauthorized login attempt from: ${normalizedEmail}`);
-      return { success: true, message: 'If your email is authorized, you will receive a login link shortly.' };
+      return {
+        success: true,
+        message:
+          'If your email is authorized, you will receive a login link shortly.',
+      };
     }
 
     // Generate magic link token
@@ -61,11 +67,12 @@ export class AuthService {
     // Send magic link email
     try {
       await this.emailService.sendMagicLoginEmail(normalizedEmail, magicToken);
-      
-      console.log(`✅ Magic link sent to: ${normalizedEmail}`);
-      return { 
-        success: true, 
-        message: 'Login link sent! Check your email and click the link to access the dashboard.' 
+
+      console.log(`✅ Magic -test- link sent to: ${normalizedEmail}`);
+      return {
+        success: true,
+        message:
+          'Login link sent! Check your email and click the link to access the dashboard.',
       };
     } catch (error) {
       console.error('❌ Failed to send magic link:', error);
@@ -89,14 +96,13 @@ export class AuthService {
     // Create a new session for the user
     const sessionId = this.sessionManager.createSession(magicLink.email, {
       loginMethod: 'magic-link',
-      userAgent: null // Will be set by middleware
+      userAgent: null, // Will be set by middleware
     });
 
     console.log(`✅ User logged in: ${magicLink.email}`);
-    
+
     return {
       sessionId,
-      email: magicLink.email
     };
   }
 
@@ -128,7 +134,7 @@ export class AuthService {
     return {
       sessions: this.sessionManager.getStats(),
       magicLinks: this.sessionManager.getMagicLinkStats(),
-      authorizedEmails: this.authorizedEmails.length
+      authorizedEmails: this.authorizedEmails.length,
     };
   }
 

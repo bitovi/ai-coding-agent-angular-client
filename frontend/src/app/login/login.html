@@ -1,0 +1,106 @@
+<div class="bg-background flex min-h-screen items-center justify-center p-4">
+  <div class="w-full max-w-md space-y-8">
+    <div class="text-center">
+      <div class="animate-bounce-twice mb-4 text-6xl">🤖</div>
+      <h1 class="text-foreground mb-2 text-3xl font-bold">AI Coding Agent</h1>
+      <p class="text-muted-foreground">Secure passwordless login</p>
+    </div>
+
+    @if (loginResponse()) {
+      <div class="success mb-6 rounded-xl p-4">
+        <div class="flex items-center space-x-3">
+          <div class="text-2xl">✅</div>
+          <div>
+            <h3 class="text-foreground font-semibold">Success!</h3>
+            <p class="text-muted-foreground mb-3 text-sm">
+              {{ loginResponse() }}
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="error p-4rounded-xl mb-6">
+        <div class="flex items-center space-x-3">
+          <div class="text-2xl">❌</div>
+          <div>
+            <h3 class="text-destructive font-semibold">Error</h3>
+            <p class="text-destructive text-sm">{{ error() }}</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="bg-card rounded-xl border p-8 shadow-lg">
+      <form
+        class="space-y-6"
+        id="loginForm"
+        #loginForm="ngForm"
+        (ngSubmit)="onSubmit(loginForm)"
+      >
+        <div class="space-y-2">
+          <label for="email" class="text-foreground text-sm font-medium">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            #email="ngModel"
+            [(ngModel)]="emailValue"
+            required
+            email
+            placeholder="Enter your email address"
+            autocomplete="email"
+            class="border-input bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring focus:ring-offset-background flex h-12 w-full rounded-lg border px-3 py-2 text-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+            [class.border-destructive]="email.invalid && email.touched"
+            [class.focus:ring-destructive]="email.invalid && email.touched"
+          />
+          @if (email.invalid && email.touched) {
+            <div class="text-destructive text-sm">
+              @if (email.errors?.['required']) {
+                <div>Email address is required</div>
+              }
+              @if (email.errors?.['email']) {
+                <div>Please enter a valid email address</div>
+              }
+            </div>
+          }
+        </div>
+
+        <button
+          type="submit"
+          id="loginButton"
+          [disabled]="loginForm.invalid || loading()"
+          class="bg-primary hover:bg-primary/90 text-primary-foreground focus:ring-ring focus:ring-offset-background disabled:hover:bg-primary flex h-12 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          @if (loading()) {
+            <div
+              class="border-primary-foreground h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"
+            ></div>
+            <span>Sending...</span>
+          } @else {
+            <span>🔗</span>
+            <span>Send Magic Link</span>
+          }
+        </button>
+      </form>
+    </div>
+
+    <div class="rounded-xl border border-blue-200 bg-blue-50 p-6 shadow-lg">
+      <h3
+        class="text-foreground mb-4 flex items-center space-x-2 text-lg font-semibold"
+      >
+        <span>🔐</span>
+        <span>How it works:</span>
+      </h3>
+      <ul class="text-muted-foreground list-disc space-y-2 pl-6 text-sm">
+        <li>Enter your email address above</li>
+        <li>We'll send you a secure login link</li>
+        <li>Click the link to access your dashboard</li>
+        <li>No passwords required!</li>
+      </ul>
+    </div>
+  </div>
+</div>

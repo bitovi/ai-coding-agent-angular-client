@@ -1,33 +1,15 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
     "moduleResolution": "node",
-    "allowJs": true,
-    "checkJs": false,
     "outDir": "./dist",
     "rootDir": "./",
-    "strict": false,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "strict": false
   },
-  "include": [
-    "src/**/*",
-    "index.ts",
-    "scripts/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tests",
-    "**/*.test.ts",
-    "**/*.test.js"
-  ],
+  "include": ["src/**/*", "index.ts", "scripts/**/*"],
+  "exclude": ["node_modules", "dist", "tests"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"

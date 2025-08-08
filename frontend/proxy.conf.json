@@ -1,42 +1,42 @@
 {
   "/api/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/auth/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/mcp/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/oauth/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/prompt/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/health": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/static/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3100",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
