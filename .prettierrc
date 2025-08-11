@@ -23,7 +23,10 @@
     {
       "files": "*.html",
       "options": {
-        "parser": "angular"
+        "parser": "angular",
+        "printWidth": 80,
+        "htmlWhitespaceSensitivity": "ignore",
+        "bracketSameLine": false
       }
     }
   ]

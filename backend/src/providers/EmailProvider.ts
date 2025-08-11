@@ -33,13 +33,15 @@ export class EmailProvider {
       secure: process.env.EMAIL_SECURE === 'true',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
+        pass: process.env.EMAIL_PASS,
+      },
     };
 
     // If no email configuration, create a test account for development
     if (!emailConfig.auth.user || !emailConfig.auth.pass) {
-      console.warn('⚠️  No email configuration found. Email notifications will be logged to console.');
+      console.warn(
+        '⚠️  No email configuration found. Email notifications will be logged to console.'
+      );
       this.transporter = null;
       return;
     }
@@ -56,7 +58,10 @@ export class EmailProvider {
   /**
    * Send authorization needed email
    */
-  async sendAuthorizationNeededEmail(userEmail: string, unauthorizedServers: string[]): Promise<void> {
+  async sendAuthorizationNeededEmail(
+    userEmail: string,
+    unauthorizedServers: string[]
+  ): Promise<void> {
     const subject = 'Authorization Required - AI Coding Agent';
     const htmlContent = this.buildAuthorizationEmailHTML(unauthorizedServers);
     const textContent = this.buildAuthorizationEmailText(unauthorizedServers);
@@ -68,9 +73,9 @@ export class EmailProvider {
    * Build HTML email content for authorization needed
    */
   private buildAuthorizationEmailHTML(unauthorizedServers: string[]): string {
-    const serverList = unauthorizedServers.map(server => 
-      `<li><strong>${server}</strong></li>`
-    ).join('');
+    const serverList = unauthorizedServers
+      .map((server) => `<li><strong>${server}</strong></li>`)
+      .join('');
 
     return `
       <html>
@@ -107,7 +112,7 @@ export class EmailProvider {
               </div>
               <p>Please return to the AI Coding Agent dashboard to authorize these services before the prompt can be executed.</p>
               <div class="cta">
-                <a href="${process.env.BASE_URL || 'http://localhost:3000'}" class="button">
+                <a href="${process.env.BASE_URL || 'http://localhost:4200'}" class="button">
                   Go to Dashboard
                 </a>
               </div>
@@ -123,7 +128,9 @@ export class EmailProvider {
    * Build text email content for authorization needed
    */
   private buildAuthorizationEmailText(unauthorizedServers: string[]): string {
-    const serverList = unauthorizedServers.map(server => `- ${server}`).join('\n');
+    const serverList = unauthorizedServers
+      .map((server) => `- ${server}`)
+      .join('\n');
 
     return `
 Authorization Required - AI Coding Agent
@@ -136,7 +143,7 @@ ${serverList}
 
 Please return to the AI Coding Agent dashboard to authorize these services before the prompt can be executed.
 
-Dashboard: ${process.env.BASE_URL || 'http://localhost:3000'}
+Dashboard: ${process.env.BASE_URL || 'http://localhost:4200'}
 
 Best regards,
 Your AI Coding Agent
@@ -147,9 +154,9 @@ Your AI Coding Agent
    * Send magic login link email
    */
   async sendMagicLoginEmail(email: string, magicToken: string): Promise<void> {
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.BASE_URL || 'http://localhost:4200';
     const loginUrl = `${baseUrl}/auth/login?token=${magicToken}`;
-    
+
     const subject = 'Login to AI Coding Agent';
     const htmlContent = this.buildMagicLoginEmailHTML(loginUrl);
     const textContent = this.buildMagicLoginEmailText(loginUrl);
@@ -246,7 +253,12 @@ Your AI Coding Agent
   /**
    * Send email notification
    */
-  async sendEmail(to: string, subject: string, text: string, html: string): Promise<any> {
+  async sendEmail(
+    to: string,
+    subject: string,
+    text: string,
+    html: string
+  ): Promise<any> {
     if (!this.transporter) {
       // Log to console if no email configuration
       console.log('\n📧 EMAIL NOTIFICATION (would be sent to:', to, ')');
@@ -263,7 +275,7 @@ Your AI Coding Agent
         to,
         subject,
         text,
-        html
+        html,
       };
 
       const result = await this.transporter.sendMail(mailOptions);

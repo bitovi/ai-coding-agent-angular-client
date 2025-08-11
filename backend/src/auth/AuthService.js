@@ -88,6 +88,7 @@ export class AuthService {
       throw new Error('No login token provided');
     }
 
+    console.log(token);
     const magicLink = this.sessionManager.validateMagicLink(token);
     if (!magicLink) {
       throw new Error('Invalid or expired login link');

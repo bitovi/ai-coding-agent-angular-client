@@ -57,13 +57,15 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.js"
+          },
           "configurations": {
             "production": {
               "buildTarget": "ai-coding-agent-frontend:build:production"
             },
             "development": {
-              "buildTarget": "ai-coding-agent-frontend:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "buildTarget": "ai-coding-agent-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

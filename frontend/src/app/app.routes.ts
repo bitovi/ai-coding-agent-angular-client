@@ -1,25 +1,30 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './core/guards/auth-guard';
+import { redirectIfLoggedInGuard } from './core/guards/redirect-if-logged-in-guard';
 import { Layout } from './layout/layout';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'auth',
     pathMatch: 'full',
   },
   {
-    path: 'login',
-    loadComponent: () => import('../app/login/login').then((m) => m.Login),
+    path: 'auth',
+    loadChildren: () =>
+      import('./pages/auth/auth.routes').then((m) => m.authRoutes),
+    canActivate: [redirectIfLoggedInGuard],
   },
   {
     path: '',
     component: Layout,
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('../app/dashboard/dashboard').then((m) => m.Dashboard),
+          import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
     ],
   },

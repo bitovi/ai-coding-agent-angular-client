@@ -2,17 +2,24 @@
   <div class="container mx-auto px-4 py-8">
     <div class="bg-card text-card-foreground mb-8 rounded-xl border p-8 shadow">
       <div class="flex items-center justify-between">
-        <div class="flex-1"></div>
-        <div class="flex items-center space-x-3">
-          <div class="animate-bounce-twice text-4xl">🤖</div>
-          <h1 class="text-foreground text-2xl font-bold">AI Coding Agent</h1>
+        <div class="flex-1 text-center">
+          <div class="flex items-center justify-center gap-2 text-center">
+            <div class="animate-bounce-twice text-4xl">🤖</div>
+            <h1 class="text-4xl font-bold text-blue-600">AI Coding Agent</h1>
+          </div>
+
+          <div class="text-muted-foreground text-lg">
+            Claude Code with MCP Service Integration
+          </div>
         </div>
-        <div class="flex flex-1 justify-end">
+        <div class="text-muted-foreground flex items-center justify-end gap-4">
+          {{ user()?.data?.email }}
           <button
             type="button"
-            class="bg-destructive hover:bg-destructive/90 text-destructive-foreground focus:ring-ring focus:ring-offset-background rounded-lg px-4 py-2 font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+            (click)="logout()"
+            class="focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground flex h-8 cursor-pointer items-center justify-center gap-2 rounded-md border px-3 text-xs font-medium whitespace-nowrap shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
           >
-            🚪 Logout
+            Logout
           </button>
         </div>
       </div>
