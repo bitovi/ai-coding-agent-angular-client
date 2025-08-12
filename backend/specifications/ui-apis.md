@@ -18,7 +18,7 @@ For failed authentication, endpoints return:
 
 ### User Information
 
-#### `GET /api/user`
+#### `GET /user`
 Get current authenticated user information.
 
 **Response:**
@@ -37,7 +37,7 @@ Get current authenticated user information.
 
 ### Prompts
 
-#### `GET /api/prompts`
+#### `GET /prompts`
 Get all available prompts with their authorization status.
 
 **Response:**
@@ -78,14 +78,14 @@ Get all available prompts with their authorization status.
           "type": "mcp-server",
           "description": "Atlassian Jira integration",
           "isAvailable": false,
-          "authUrl": "/api/connections/mcp/jira/authorize"
+          "authUrl": "/connections/mcp/jira/authorize"
         },
         {
           "name": "git-credentials", 
           "type": "credential",
           "description": "Git credentials for repository access",
           "isAvailable": true,
-          "setupUrl": "/api/connections/credential/git-credentials/setup"
+          "setupUrl": "/connections/credential/git-credentials/setup"
         }
       ]
     }
@@ -105,7 +105,7 @@ Get all available prompts with their authorization status.
 
 ---
 
-#### `GET /api/prompts/:promptName`
+#### `GET /prompts/:promptName`
 Get details for a specific prompt.
 
 **Response:**
@@ -125,7 +125,7 @@ Get details for a specific prompt.
 
 ---
 
-#### `POST /api/prompts/:promptName/run`
+#### `POST /prompts/:promptName/run`
 Execute a prompt with streaming response.
 
 **Request Body:**
@@ -157,7 +157,7 @@ data: {"type": "complete", "success": true}
     {
       "name": "jira",
       "type": "mcp-server",
-      "authUrl": "/api/connections/mcp/jira/authorize"
+      "authUrl": "/connections/mcp/jira/authorize"
     }
   ],
   "message": "Please authorize the required connections"
@@ -166,7 +166,7 @@ data: {"type": "complete", "success": true}
 
 ---
 
-#### `GET /api/prompts/:promptName/activity`
+#### `GET /prompts/:promptName/activity`
 Get execution history for a specific prompt.
 
 **Query Parameters:**
@@ -216,7 +216,7 @@ Get execution history for a specific prompt.
 
 ### Connections
 
-#### `GET /api/connections`
+#### `GET /connections`
 Get all available connections and their status.
 
 **Response:**
@@ -228,7 +228,7 @@ Get all available connections and their status.
       "type": "mcp-server",
       "description": "Atlassian Jira integration",
       "isAvailable": false,
-      "authUrl": "/api/connections/mcp/jira/authorize",
+      "authUrl": "/connections/mcp/jira/authorize",
       "details": {
         "url": "https://api.atlassian.com/oauth",
         "scopes": ["read:jira-work", "write:jira-work"],
@@ -242,7 +242,7 @@ Get all available connections and their status.
       "type": "mcp-server", 
       "description": "GitHub repository access",
       "isAvailable": true,
-      "authUrl": "/api/connections/mcp/github-repo/authorize",
+      "authUrl": "/connections/mcp/github-repo/authorize",
       "details": {
         "url": "https://api.github.com",
         "lastAuthorized": "2024-01-15T09:00:00Z",
@@ -254,7 +254,7 @@ Get all available connections and their status.
       "type": "credential",
       "description": "Git credentials for repository access",
       "isAvailable": true,
-      "setupUrl": "/api/connections/credential/git-credentials/setup",
+      "setupUrl": "/connections/credential/git-credentials/setup",
       "details": {
         "lastConfigured": "2024-01-15T08:00:00Z",
         "method": "token"
@@ -265,7 +265,7 @@ Get all available connections and their status.
       "type": "credential",
       "description": "Docker registry credentials",
       "isAvailable": false,
-      "setupUrl": "/api/connections/credential/docker-registry/setup",
+      "setupUrl": "/connections/credential/docker-registry/setup",
       "details": {
         "lastConfigured": null
       }
@@ -276,7 +276,7 @@ Get all available connections and their status.
 
 ---
 
-#### `POST /api/connections/mcp/:mcpName/authorize`
+#### `POST /connections/mcp/:mcpName/authorize`
 Initiate OAuth authorization for an MCP server.
 
 **Response:**
@@ -292,7 +292,7 @@ Initiate OAuth authorization for an MCP server.
 
 ---
 
-#### `GET /api/connections/mcp/:mcpName/status`
+#### `GET /connections/mcp/:mcpName/status`
 Get authorization status for a specific MCP server.
 
 **Response:**
@@ -312,7 +312,7 @@ Get authorization status for a specific MCP server.
 
 ---
 
-#### `POST /api/connections/credential/:credentialType/setup`
+#### `POST /connections/credential/:credentialType/setup`
 Configure credential-based connections (e.g., git credentials).
 
 **Request Body (for git-credentials):**
@@ -339,7 +339,7 @@ Configure credential-based connections (e.g., git credentials).
 
 ### System Information
 
-#### `GET /api/system/health`
+#### `GET /system/health`
 Health check endpoint.
 
 **Response:**
@@ -354,7 +354,7 @@ Health check endpoint.
 
 ---
 
-#### `GET /api/system/status`
+#### `GET /system/status`
 Get system configuration and status.
 
 **Response:**
@@ -378,7 +378,7 @@ Get system configuration and status.
 
 ---
 
-#### `GET /api/system/config`
+#### `GET /system/config`
 Get configuration information (non-sensitive).
 
 **Response:**
@@ -396,7 +396,7 @@ Get configuration information (non-sensitive).
 
 ### Execution History
 
-#### `GET /api/executions`
+#### `GET /executions`
 Get recent execution history across all prompts.
 
 **Query Parameters:**
@@ -435,7 +435,7 @@ Get recent execution history across all prompts.
 
 ---
 
-#### `GET /api/executions/:executionId`
+#### `GET /executions/:executionId`
 Get details for a specific execution.
 
 **Response:**
@@ -493,7 +493,7 @@ Common HTTP status codes:
 
 For real-time updates, the frontend can:
 
-1. **Server-Sent Events**: `/api/prompts/:promptName/run` for execution streaming
+1. **Server-Sent Events**: `/prompts/:promptName/run` for execution streaming
 2. **Polling**: Regular polling of status endpoints for UI updates
 3. **Future**: WebSocket connection for real-time notifications
 
@@ -505,13 +505,13 @@ For real-time updates, the frontend can:
 - Cache frequently accessed data (prompts list, connections status)
 
 ### Authentication Flow
-1. Check `/api/user` on app load
+1. Check `/user` on app load
 2. Redirect to `/login` if not authenticated
 3. Use session cookies for all API calls (`credentials: 'include'`)
 
 ### Real-time Updates
 - Use SSE for prompt execution streaming
-- Poll `/api/connections` after authorization flows
+- Poll `/connections` after authorization flows
 - Refresh prompt status after MCP server authorization
 
 ### Error Handling

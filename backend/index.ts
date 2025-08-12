@@ -48,7 +48,7 @@ class AICodingAgent {
 
   constructor() {
     this.app = express();
-    this.port = parseInt(process.env.PORT || '3100');
+    this.port = parseInt(process.env.PORT || '3000');
 
     // Initialize services
     this.configManager = new ConfigManager();
@@ -133,7 +133,7 @@ class AICodingAgent {
       });
     });
 
-    this.app.post('/api/auth/request-login', async (req, res) => {
+    this.app.post('/auth/request-login', async (req, res) => {
       try {
         console.log('🔐 Login request for:', req.body.email);
         const { email } = req.body;
@@ -157,7 +157,7 @@ class AICodingAgent {
       }
     });
 
-    this.app.get('/api/auth/login', async (req, res) => {
+    this.app.get('/auth/login', async (req, res) => {
       try {
         const { token } = req.query;
 
@@ -191,7 +191,7 @@ class AICodingAgent {
       }
     });
 
-    this.app.post('/api/auth/logout', (req, res) => {
+    this.app.post('/auth/logout', (req, res) => {
       const sessionId = this.authMiddleware.getSessionIdFromRequest(req);
       if (sessionId) {
         this.authService.logout(sessionId);
@@ -204,13 +204,13 @@ class AICodingAgent {
     });
 
     // Legacy prompt activity page (redirect to React route)
-    this.app.get('/api/prompts/:promptName/activity.html', (req, res) => {
+    this.app.get('/prompts/:promptName/activity.html', (req, res) => {
       res.redirect(`/prompts/${req.params.promptName}/activity`);
     });
 
     // MCP authorization endpoint
     this.app.post(
-      '/api/mcp/:mcpName/authorize',
+      '/mcp/:mcpName/authorize',
       this.authMiddleware.authenticate.bind(this.authMiddleware),
       async (req, res) => {
         try {
@@ -233,7 +233,7 @@ class AICodingAgent {
 
     // Environment connections setup endpoint
     this.app.post(
-      '/api/connections/git-credentials/setup',
+      '/connections/git-credentials/setup',
       this.authMiddleware.authenticate.bind(this.authMiddleware),
       async (req, res) => {
         try {
@@ -256,7 +256,7 @@ class AICodingAgent {
     );
 
     // OAuth callback endpoint
-    this.app.get('/api/oauth/callback', async (req, res) => {
+    this.app.get('/oauth/callback', async (req, res) => {
       try {
         await this.authManager.handleOAuthCallback(req, res);
       } catch (error: any) {
@@ -267,7 +267,7 @@ class AICodingAgent {
 
     // Prompt execution endpoint
     this.app.post(
-      '/api/prompt/:promptName/run',
+      '/prompt/:promptName/run',
       this.authMiddleware.authenticate.bind(this.authMiddleware),
       async (req, res) => {
         try {
@@ -339,12 +339,12 @@ class AICodingAgent {
     );
 
     // Health check
-    this.app.get('/api/health', (req, res) => {
+    this.app.get('/health', (req, res) => {
       res.json({ status: 'ok', timestamp: new Date().toISOString() });
     });
 
     // API documentation endpoint
-    this.app.get('/api/docs', (req, res) => {
+    this.app.get('/docs', (req, res) => {
       res.json({
         name: 'AI Coding Agent API',
         version: '1.0.0',
@@ -353,29 +353,29 @@ class AICodingAgent {
         frontend: 'http://localhost:4201',
         endpoints: {
           system: {
-            '/api/system/health': 'System health check',
-            '/api/system/status': 'System status and configuration',
-            '/api/system/config': 'System configuration',
+            '/system/health': 'System health check',
+            '/system/status': 'System status and configuration',
+            '/system/config': 'System configuration',
           },
           authentication: {
-            '/api/auth/request-login': 'POST - Request magic link login',
-            '/api/auth/login': 'GET - Verify magic link token',
-            '/api/auth/logout': 'POST - Logout user',
+            '/auth/request-login': 'POST - Request magic link login',
+            '/auth/login': 'GET - Verify magic link token',
+            '/auth/logout': 'POST - Logout user',
           },
           prompts: {
-            '/api/prompts': 'GET - List all prompts',
-            '/api/prompts/:name': 'GET - Get specific prompt',
-            '/api/prompt/:name/run': 'POST - Execute a prompt',
+            '/prompts': 'GET - List all prompts',
+            '/prompts/:name': 'GET - Get specific prompt',
+            '/prompt/:name/run': 'POST - Execute a prompt',
           },
           connections: {
-            '/api/connections': 'GET - List all connections',
-            '/api/connections/git-credentials/setup':
+            '/connections': 'GET - List all connections',
+            '/connections/git-credentials/setup':
               'POST - Setup git credentials',
-            '/api/mcp/:name/authorize': 'POST - Authorize MCP server',
+            '/mcp/:name/authorize': 'POST - Authorize MCP server',
           },
           execution: {
-            '/api/executions': 'GET - Get execution history',
-            '/api/prompts/:name/activity': 'GET - Get prompt activity',
+            '/executions': 'GET - Get execution history',
+            '/prompts/:name/activity': 'GET - Get prompt activity',
           },
         },
       });
@@ -407,12 +407,12 @@ class AICodingAgent {
           'This is an API-only backend. Please use the Angular frontend at http://localhost:4201',
         path: req.path,
         availableRoutes: [
-          '/api/*',
-          '/api/oauth/*',
-          '/api/mcp/*',
-          '/api/prompt/*',
-          '/api/connections/*',
-          '/api/health',
+          '/*',
+          '/oauth/*',
+          '/mcp/*',
+          '/prompt/*',
+          '/connections/*',
+          '/health',
         ],
       });
     });

@@ -1,63 +1,67 @@
 @let prompts = promptsRef.value()?.prompts;
 @let promptCount = prompts?.length || 0;
-
-<div class="mb-8">
-  <div class="flex items-center space-x-2">
-    <h2
-      class="flex items-center gap-2 leading-none font-semibold tracking-tight"
-    >
-      📋 Your Prompts
-      <span class="text-muted-foreground text-sm font-normal">
-        ({{ promptCount }})
-      </span>
-    </h2>
-  </div>
-</div>
-
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-  @for (prompt of prompts; track prompt.name) {
-    <div
-      class="bg-card flex h-full flex-col rounded-xl border p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
-    >
-      <div class="flex flex-col space-y-1.5">
-        <h3 class="text-xl font-semibold tracking-tight">
-          {{ prompt.name }}
-        </h3>
-        <p class="text-muted-foreground text-sm leading-relaxed">
-          {{ prompt.messages[0].content | slice: 0 : 100
-          }}{{ prompt.messages[0].content.length > 100 ? '...' : '' }}
-        </p>
-      </div>
-
-      <div class="flex-1 pt-6">
-        @if (prompt.connections.length > 0) {
-          <div class="space-y-2">
-            <p class="text-muted-foreground text-sm font-medium">
-              Required Connections:
-            </p>
-            <div class="flex flex-wrap gap-2">
-              @for (connection of prompt.connections; track connection) {
-                <div class="flex items-center gap-1">
-                  <span class="text-primary font-semibold">
-                    {{ connection.name }}
-                  </span>
-                </div>
-              }
-            </div>
-          </div>
-        }
-      </div>
-
-      <!-- Card Footer with Button -->
-      <div class="mt-6 flex justify-start">
-        <button
-          type="button"
-          [routerLink]="['/prompts', prompt.name, 'activity']"
-          class="bg-primary hover:bg-primary/90 text-primary-foreground focus:ring-ring focus:ring-offset-background rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+<div class="space-y-8">
+  <div class="bg-card text-card-foreground rounded-xl border p-8 shadow">
+    <div class="mb-8">
+      <div class="flex items-center space-x-2">
+        <h2
+          class="flex items-center gap-2 leading-none font-semibold tracking-tight"
         >
-          Explore
-        </button>
+          <fa-icon [icon]="['far', 'clipboard']"></fa-icon>
+          Your Prompts
+          <span class="text-muted-foreground text-sm font-normal">
+            ({{ promptCount }})
+          </span>
+        </h2>
       </div>
     </div>
-  }
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      @for (prompt of prompts; track prompt.name) {
+        <div
+          class="bg-card flex h-full flex-col rounded-xl border p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
+        >
+          <div class="flex flex-col space-y-1.5">
+            <h3 class="text-xl font-semibold tracking-tight">
+              {{ prompt.name }}
+            </h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">
+              {{ prompt.messages[0].content | slice: 0 : 100
+              }}{{ prompt.messages[0].content.length > 100 ? '...' : '' }}
+            </p>
+          </div>
+
+          <div class="flex-1 pt-6">
+            @if (prompt.connections.length > 0) {
+              <div class="space-y-2">
+                <p class="text-muted-foreground text-sm font-medium">
+                  Required Connections:
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  @for (connection of prompt.connections; track connection) {
+                    <div class="flex items-center gap-1">
+                      <span class="text-primary font-semibold">
+                        {{ connection.name }}
+                      </span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Card Footer with Button -->
+          <div class="mt-6 flex justify-start">
+            <button
+              type="button"
+              [routerLink]="['/prompts', prompt.name, 'activity']"
+              class="bg-primary hover:bg-primary/90 text-primary-foreground focus:ring-ring focus:ring-offset-background rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+            >
+              Explore
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
 </div>

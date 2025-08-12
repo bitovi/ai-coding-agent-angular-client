@@ -1,0 +1,96 @@
+@let connections = this.connections() || [];
+@let connectionCount = connections?.length || 0;
+
+<div class="mt-8">
+  <div class="bg-card text-card-foreground rounded-xl border p-8 shadow">
+    <div class="mb-8">
+      <div class="flex items-center space-x-2">
+        <h2
+          class="flex items-center gap-2 leading-none font-semibold tracking-tight"
+        >
+          <fa-icon [icon]="['fas', 'link']"></fa-icon>
+          Your Connections
+          <span class="text-muted-foreground text-sm font-normal">
+            ({{ connectionCount }})
+          </span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      @for (connection of connections; track connection.name) {
+        <div
+          class="bg-card flex h-full flex-col rounded-xl border p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
+        >
+          <div class="flex flex-col space-y-1.5">
+            <h3 class="text-xl font-semibold tracking-tight">
+              {{ connection.name }}
+            </h3>
+            <p class="text-muted-foreground text-sm">
+              <span class="block space-y-1">
+                <span class="block">
+                  <strong>Type:</strong>
+                  {{ connection.name }}
+                </span>
+              </span>
+            </p>
+          </div>
+
+          <div class="flex-1 pt-6">
+            <div class="flex items-center gap-2">
+              <fa-icon
+                [icon]="
+                  connection.isAvailable
+                    ? ['far', 'check-circle']
+                    : ['far', 'times-circle']
+                "
+                [ngClass]="
+                  connection.isAvailable ? 'text-green-500' : 'text-red-500'
+                "
+              ></fa-icon>
+
+              <div
+                class="pointer-events-none inline-flex items-center rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+                [ngClass]="
+                  connection.isAvailable
+                    ? 'bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-900'
+                    : 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600'
+                "
+              >
+                @if (connection.isAvailable) {
+                  Authorized
+                } @else {
+                  Not Authorized
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer with Button -->
+          <div class="mt-6">
+            <button
+              type="button"
+              (click)="authorize(connection)"
+              [disabled]="connection.isAvailable"
+              class="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+              [ngClass]="
+                connection.isAvailable
+                  ? 'text-muted-foreground cursor-not-allowed border border-gray-300 bg-transparent'
+                  : 'bg-primary hover:bg-primary/90 text-primary-foreground focus:ring-ring focus:ring-offset-background cursor-pointer'
+              "
+            >
+              <fa-icon
+                [icon]="
+                  connection.isAvailable
+                    ? ['far', 'circle-check']
+                    : ['fas', 'lock']
+                "
+              ></fa-icon>
+              {{ connection.isAvailable ? 'Authorized' : 'Authorize' }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

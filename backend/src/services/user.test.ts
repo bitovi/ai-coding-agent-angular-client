@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
+
 import type { User } from '../types/index.js';
-import { getUserInfo } from './user.js';
 import type { Dependencies } from './common.js';
+import { getUserInfo } from './user.js';
 
 // Mock the common module
 jest.mock('./common.js', () => ({
@@ -24,14 +25,14 @@ describe('getUserInfo', () => {
       body: {},
       headers: {},
       user: undefined,
-      xhr: false
+      xhr: false,
     };
 
     // Mock response
     mockRes = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
-      redirect: jest.fn()
+      redirect: jest.fn(),
     };
 
     // Mock dependencies (getUserInfo doesn't use any deps, but keeping for consistency)
@@ -43,9 +44,9 @@ describe('getUserInfo', () => {
     const mockUser = {
       email: 'test@example.com',
       sessionId: 'session_123',
-      isAuthenticated: true
+      isAuthenticated: true,
     };
-    
+
     mockReq.user = mockUser;
 
     // Act
@@ -55,7 +56,7 @@ describe('getUserInfo', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       success: true,
       data: mockUser,
-      timestamp: expect.any(String)
+      timestamp: expect.any(String),
     });
   });
 
@@ -72,10 +73,10 @@ describe('getUserInfo', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       error: 'Unauthorized',
       message: 'Login required',
-      loginUrl: '/login'
+      loginUrl: '/login',
     });
     expect(mockRes.redirect).not.toHaveBeenCalled();
-    // Note: isBrowserRequest is not called since /api/user always returns JSON
+    // Note: isBrowserRequest is not called since /user always returns JSON
   });
 
   it('should return 401 JSON response for API requests when user is not authenticated', () => {
@@ -92,7 +93,7 @@ describe('getUserInfo', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       error: 'Unauthorized',
       message: 'Login required',
-      loginUrl: '/login'
+      loginUrl: '/login',
     });
     expect(mockRes.redirect).not.toHaveBeenCalled();
   });
@@ -111,16 +112,16 @@ describe('getUserInfo', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       error: 'Unauthorized',
       message: 'Login required',
-      loginUrl: '/login'
+      loginUrl: '/login',
     });
   });
 
   it('should handle user object with minimal properties', () => {
     // Arrange
     const minimalUser = {
-      email: 'minimal@example.com'
+      email: 'minimal@example.com',
     };
-    
+
     (mockReq as any).user = minimalUser;
 
     // Act
@@ -130,7 +131,7 @@ describe('getUserInfo', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       success: true,
       data: minimalUser,
-      timestamp: expect.any(String)
+      timestamp: expect.any(String),
     });
   });
 
@@ -142,9 +143,9 @@ describe('getUserInfo', () => {
       isAuthenticated: true,
       name: 'John Doe',
       role: 'admin',
-      lastLogin: '2024-01-15T10:30:00Z'
+      lastLogin: '2024-01-15T10:30:00Z',
     };
-    
+
     mockReq.user = detailedUser;
 
     // Act
@@ -154,7 +155,7 @@ describe('getUserInfo', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       success: true,
       data: detailedUser,
-      timestamp: expect.any(String)
+      timestamp: expect.any(String),
     });
   });
 
@@ -162,12 +163,12 @@ describe('getUserInfo', () => {
     // Arrange
     const commonModule = require('./common.js');
     const error = new Error('Test error');
-    
+
     // Mock a scenario where accessing req.user throws an error
     Object.defineProperty(mockReq, 'user', {
       get() {
         throw error;
-      }
+      },
     });
 
     // Act
@@ -182,9 +183,9 @@ describe('getUserInfo', () => {
     const mockUser = {
       email: 'timestamp@example.com',
       sessionId: 'session_789',
-      isAuthenticated: true
+      isAuthenticated: true,
     };
-    
+
     mockReq.user = mockUser;
     const beforeCall = new Date().toISOString();
 
@@ -194,11 +195,13 @@ describe('getUserInfo', () => {
     // Assert
     const response = (mockRes.json as jest.Mock).mock.calls[0][0];
     expect(response.timestamp).toEqual(expect.any(String));
-    
+
     // Verify timestamp is a valid ISO string and recent
     const timestamp = new Date(response.timestamp);
     const afterCall = new Date();
-    expect(timestamp.getTime()).toBeGreaterThanOrEqual(new Date(beforeCall).getTime());
+    expect(timestamp.getTime()).toBeGreaterThanOrEqual(
+      new Date(beforeCall).getTime()
+    );
     expect(timestamp.getTime()).toBeLessThanOrEqual(afterCall.getTime());
   });
 
@@ -210,12 +213,12 @@ describe('getUserInfo', () => {
       isAuthenticated: true,
       metadata: {
         nested: {
-          property: 'value'
+          property: 'value',
         },
-        array: [1, 2, 3]
-      }
+        array: [1, 2, 3],
+      },
     };
-    
+
     mockReq.user = originalUser;
 
     // Act

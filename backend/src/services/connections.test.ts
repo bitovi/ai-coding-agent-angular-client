@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
-import { getConnections, type GetConnectionsDeps } from './connections.js';
+
+import { type GetConnectionsDeps, getConnections } from './connections.js';
 
 // Mock the common module
 jest.mock('./common.js', () => ({
@@ -24,24 +25,24 @@ describe('getConnections', () => {
       params: {},
       body: {},
       headers: {},
-      query: {}
+      query: {},
     };
 
     // Mock response
     mockRes = {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
-      redirect: jest.fn()
+      redirect: jest.fn(),
     };
 
     // Mock dependencies
     mockDeps = {
       configManager: {
-        getMcpServers: jest.fn()
+        getMcpServers: jest.fn(),
       },
       authManager: {
-        isAuthorized: jest.fn()
-      }
+        isAuthorized: jest.fn(),
+      },
     };
   });
 
@@ -65,26 +66,26 @@ describe('getConnections', () => {
             type: 'credential',
             description: 'Git credentials for repository access',
             isAvailable: false,
-            setupUrl: '/api/connections/credential/git-credentials/setup',
+            setupUrl: '/connections/credential/git-credentials/setup',
             details: {
               lastConfigured: null,
-              method: 'token'
-            }
+              method: 'token',
+            },
           },
           {
             name: 'docker-registry',
             type: 'credential',
             description: 'Docker registry credentials',
             isAvailable: false,
-            setupUrl: '/api/connections/credential/docker-registry/setup',
+            setupUrl: '/connections/credential/docker-registry/setup',
             details: {
               lastConfigured: null,
-              method: 'credentials'
-            }
-          }
-        ]
+              method: 'credentials',
+            },
+          },
+        ],
       },
-      timestamp: expect.any(String)
+      timestamp: expect.any(String),
     });
   });
 
@@ -96,24 +97,29 @@ describe('getConnections', () => {
         name: 'jira',
         description: 'Jira integration',
         url: 'https://api.atlassian.com',
-        scopes: ['read:jira-work', 'write:jira-work']
+        scopes: ['read:jira-work', 'write:jira-work'],
       },
       {
         name: 'github',
         description: 'GitHub integration',
         url: 'https://api.github.com',
-        scopes: ['repo']
-      }
+        scopes: ['repo'],
+      },
     ];
 
-    mockDeps.configManager!.getMcpServers = jest.fn().mockReturnValue(mockMcpServers);
-    mockDeps.authManager!.isAuthorized = jest.fn()
-      .mockReturnValueOnce(true)  // jira authorized
+    mockDeps.configManager!.getMcpServers = jest
+      .fn()
+      .mockReturnValue(mockMcpServers);
+    mockDeps.authManager!.isAuthorized = jest
+      .fn()
+      .mockReturnValueOnce(true) // jira authorized
       .mockReturnValueOnce(false); // github not authorized
 
-    commonModule.checkConnectionAvailability.mockImplementation((type: string) => {
-      return type === 'git-credentials';
-    });
+    commonModule.checkConnectionAvailability.mockImplementation(
+      (type: string) => {
+        return type === 'git-credentials';
+      }
+    );
     commonModule.getConnectionDetails.mockImplementation(() => ({}));
 
     // Act
@@ -129,54 +135,54 @@ describe('getConnections', () => {
             type: 'mcp-server',
             description: 'Jira integration',
             isAvailable: true,
-            authUrl: '/api/connections/mcp/jira/authorize',
+            authUrl: '/connections/mcp/jira/authorize',
             details: {
               url: 'https://api.atlassian.com',
               scopes: ['read:jira-work', 'write:jira-work'],
               lastAuthorized: expect.any(String),
               tokenExpiry: null,
-              hasRefreshToken: false
-            }
+              hasRefreshToken: false,
+            },
           },
           {
             name: 'github',
             type: 'mcp-server',
             description: 'GitHub integration',
             isAvailable: false,
-            authUrl: '/api/connections/mcp/github/authorize',
+            authUrl: '/connections/mcp/github/authorize',
             details: {
               url: 'https://api.github.com',
               scopes: ['repo'],
               lastAuthorized: null,
               tokenExpiry: null,
-              hasRefreshToken: false
-            }
+              hasRefreshToken: false,
+            },
           },
           {
             name: 'git-credentials',
             type: 'credential',
             description: 'Git credentials for repository access',
             isAvailable: true,
-            setupUrl: '/api/connections/credential/git-credentials/setup',
+            setupUrl: '/connections/credential/git-credentials/setup',
             details: {
               lastConfigured: expect.any(String),
-              method: 'token'
-            }
+              method: 'token',
+            },
           },
           {
             name: 'docker-registry',
             type: 'credential',
             description: 'Docker registry credentials',
             isAvailable: false,
-            setupUrl: '/api/connections/credential/docker-registry/setup',
+            setupUrl: '/connections/credential/docker-registry/setup',
             details: {
               lastConfigured: null,
-              method: 'credentials'
-            }
-          }
-        ]
+              method: 'credentials',
+            },
+          },
+        ],
       },
-      timestamp: expect.any(String)
+      timestamp: expect.any(String),
     });
 
     expect(mockDeps.authManager!.isAuthorized).toHaveBeenCalledWith('jira');
@@ -189,12 +195,14 @@ describe('getConnections', () => {
     const mockMcpServers = [
       {
         name: 'unknown-server',
-        url: 'https://api.unknown.com'
+        url: 'https://api.unknown.com',
         // No description field
-      }
+      },
     ];
 
-    mockDeps.configManager!.getMcpServers = jest.fn().mockReturnValue(mockMcpServers);
+    mockDeps.configManager!.getMcpServers = jest
+      .fn()
+      .mockReturnValue(mockMcpServers);
     mockDeps.authManager!.isAuthorized = jest.fn().mockReturnValue(false);
     commonModule.checkConnectionAvailability.mockReturnValue(false);
     commonModule.getConnectionDetails.mockImplementation(() => ({}));
@@ -204,21 +212,23 @@ describe('getConnections', () => {
 
     // Assert
     const response = (mockRes.json as jest.Mock).mock.calls[0][0];
-    const mcpConnection = response.data.connections.find((c: any) => c.name === 'unknown-server');
-    
+    const mcpConnection = response.data.connections.find(
+      (c: any) => c.name === 'unknown-server'
+    );
+
     expect(mcpConnection).toEqual({
       name: 'unknown-server',
       type: 'mcp-server',
       description: 'unknown-server integration',
       isAvailable: false,
-      authUrl: '/api/connections/mcp/unknown-server/authorize',
+      authUrl: '/connections/mcp/unknown-server/authorize',
       details: {
         url: 'https://api.unknown.com',
         scopes: undefined,
         lastAuthorized: null,
         tokenExpiry: null,
-        hasRefreshToken: false
-      }
+        hasRefreshToken: false,
+      },
     });
   });
 
@@ -226,10 +236,12 @@ describe('getConnections', () => {
     // Arrange
     const commonModule = require('./common.js');
     mockDeps.configManager!.getMcpServers = jest.fn().mockReturnValue([]);
-    
-    commonModule.checkConnectionAvailability.mockImplementation((type: string) => {
-      return type === 'git-credentials' || type === 'docker-registry';
-    });
+
+    commonModule.checkConnectionAvailability.mockImplementation(
+      (type: string) => {
+        return type === 'git-credentials' || type === 'docker-registry';
+      }
+    );
     commonModule.getConnectionDetails.mockImplementation(() => ({}));
 
     // Act
@@ -237,8 +249,12 @@ describe('getConnections', () => {
 
     // Assert
     const response = (mockRes.json as jest.Mock).mock.calls[0][0];
-    const gitConnection = response.data.connections.find((c: any) => c.name === 'git-credentials');
-    const dockerConnection = response.data.connections.find((c: any) => c.name === 'docker-registry');
+    const gitConnection = response.data.connections.find(
+      (c: any) => c.name === 'git-credentials'
+    );
+    const dockerConnection = response.data.connections.find(
+      (c: any) => c.name === 'docker-registry'
+    );
 
     expect(gitConnection.isAvailable).toBe(true);
     expect(gitConnection.details.lastConfigured).toEqual(expect.any(String));
@@ -251,11 +267,11 @@ describe('getConnections', () => {
     const commonModule = require('./common.js');
     const depsWithNoServers: GetConnectionsDeps = {
       configManager: {
-        getMcpServers: jest.fn().mockReturnValue([])
+        getMcpServers: jest.fn().mockReturnValue([]),
       },
       authManager: {
-        isAuthorized: jest.fn()
-      }
+        isAuthorized: jest.fn(),
+      },
     };
     commonModule.checkConnectionAvailability.mockReturnValue(false);
 
@@ -274,7 +290,7 @@ describe('getConnections', () => {
     // Arrange
     const commonModule = require('./common.js');
     const error = new Error('Test error');
-    
+
     mockDeps.configManager!.getMcpServers = jest.fn().mockImplementation(() => {
       throw error;
     });
@@ -294,16 +310,20 @@ describe('getConnections', () => {
         name: 'slack',
         description: 'Slack integration',
         url: 'https://api.slack.com',
-        scopes: ['chat:write']
-      }
+        scopes: ['chat:write'],
+      },
     ];
 
-    mockDeps.configManager!.getMcpServers = jest.fn().mockReturnValue(mockMcpServers);
+    mockDeps.configManager!.getMcpServers = jest
+      .fn()
+      .mockReturnValue(mockMcpServers);
     mockDeps.authManager!.isAuthorized = jest.fn().mockReturnValue(true);
-    
-    commonModule.checkConnectionAvailability.mockImplementation((type: string) => {
-      return type === 'git-credentials';
-    });
+
+    commonModule.checkConnectionAvailability.mockImplementation(
+      (type: string) => {
+        return type === 'git-credentials';
+      }
+    );
     commonModule.getConnectionDetails.mockImplementation(() => ({}));
 
     // Act
@@ -312,11 +332,11 @@ describe('getConnections', () => {
     // Assert
     const response = (mockRes.json as jest.Mock).mock.calls[0][0];
     expect(response.data.connections).toHaveLength(3); // 1 MCP + 2 credential connections
-    
+
     const connectionTypes = response.data.connections.map((c: any) => c.type);
     expect(connectionTypes).toContain('mcp-server');
     expect(connectionTypes).toContain('credential');
-    
+
     const connectionNames = response.data.connections.map((c: any) => c.name);
     expect(connectionNames).toContain('slack');
     expect(connectionNames).toContain('git-credentials');

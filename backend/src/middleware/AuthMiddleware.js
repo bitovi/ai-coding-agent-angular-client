@@ -21,15 +21,17 @@ export class AuthMiddleware {
   authenticate(req, res, next) {
     // Check if authentication is disabled via environment variable
     if (process.env.DISABLE_AUTH === 'true') {
-      console.log('🔓 Authentication disabled via DISABLE_AUTH environment variable');
-      req.user = { 
-        email: 'test@example.com', 
+      console.log(
+        '🔓 Authentication disabled via DISABLE_AUTH environment variable'
+      );
+      req.user = {
+        email: 'test@example.com',
         sessionId: 'test-session',
-        loginMethod: 'disabled' 
+        loginMethod: 'disabled',
       };
       return next();
     }
-    
+
     // Try session-based authentication first
     if (this.authService) {
       const sessionAuth = this.trySessionAuthentication(req, res);
@@ -37,7 +39,7 @@ export class AuthMiddleware {
         req.user = sessionAuth.user;
         return next();
       }
-      
+
       // If session auth fails and no legacy token configured, require login
       if (!this.accessToken) {
         return this.requireLogin(req, res);
@@ -69,7 +71,7 @@ export class AuthMiddleware {
     console.log('🔍 Trying session authentication for:', req.path);
     const sessionId = this.getSessionIdFromRequest(req);
     console.log('🔍 Session ID from request:', sessionId);
-    
+
     if (!sessionId) {
       console.log('🔍 No session ID found');
       return { success: false, reason: 'no_session' };
@@ -84,13 +86,13 @@ export class AuthMiddleware {
     }
 
     console.log('🔍 Session authentication successful for:', session.email);
-    return { 
-      success: true, 
-      user: { 
-        email: session.email, 
+    return {
+      success: true,
+      user: {
+        email: session.email,
         sessionId: session.id,
-        loginMethod: session.loginMethod 
-      } 
+        loginMethod: session.loginMethod,
+      },
     };
   }
 
@@ -135,21 +137,20 @@ export class AuthMiddleware {
    */
   requireLogin(req, res) {
     // Check if this is an API request in multiple ways:
-    // 1. Path starts with /api/
-    // 2. Accept header includes JSON
-    // 3. Content-Type is JSON
-    // 4. XMLHttpRequest header (req.xhr)
-    const isApiRequest = req.path.startsWith('/api/') ||
-                        req.xhr || 
-                        req.headers.accept?.includes('application/json') || 
-                        req.headers['content-type']?.includes('application/json') ||
-                        req.headers.accept?.includes('text/event-stream'); // For streaming endpoints
+    // 1. Accept header includes JSON
+    // 2. Content-Type is JSON
+    // 3. XMLHttpRequest header (req.xhr)
+    const isApiRequest =
+      req.xhr ||
+      req.headers.accept?.includes('application/json') ||
+      req.headers['content-type']?.includes('application/json') ||
+      req.headers.accept?.includes('text/event-stream'); // For streaming endpoints
 
     if (isApiRequest) {
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'Login required',
-        loginUrl: '/login'
+        loginUrl: '/login',
       });
     }
 
@@ -183,7 +184,7 @@ export class AuthMiddleware {
       'Secure=false', // Set to true in production with HTTPS
       'SameSite=Lax',
       'Path=/',
-      `Max-Age=${24 * 60 * 60}` // 24 hours
+      `Max-Age=${24 * 60 * 60}`, // 24 hours
     ];
 
     res.setHeader('Set-Cookie', cookieOptions.join('; '));
@@ -193,7 +194,10 @@ export class AuthMiddleware {
    * Clear session cookie
    */
   clearSessionCookie(res) {
-    res.setHeader('Set-Cookie', `${this.sessionCookieName}=; HttpOnly; Secure=false; SameSite=Lax; Path=/; Max-Age=0`);
+    res.setHeader(
+      'Set-Cookie',
+      `${this.sessionCookieName}=; HttpOnly; Secure=false; SameSite=Lax; Path=/; Max-Age=0`
+    );
   }
 
   /**
@@ -201,7 +205,7 @@ export class AuthMiddleware {
    */
   parseCookies(cookieHeader) {
     const cookies = {};
-    cookieHeader.split(';').forEach(cookie => {
+    cookieHeader.split(';').forEach((cookie) => {
       const [name, value] = cookie.trim().split('=');
       if (name && value) {
         cookies[name] = decodeURIComponent(value);
@@ -239,18 +243,18 @@ export class AuthMiddleware {
     const instructions = {
       sessionAuth: {
         available: !!this.authService,
-        description: 'Use magic link email authentication via /login'
+        description: 'Use magic link email authentication via /login',
       },
       tokenAuth: {
         available: !!this.accessToken,
-        description: 'Use ACCESS_TOKEN for API access'
-      }
+        description: 'Use ACCESS_TOKEN for API access',
+      },
     };
 
     if (!this.accessToken && !this.authService) {
       return {
         required: false,
-        message: 'No authentication required'
+        message: 'No authentication required',
       };
     }
 
@@ -269,7 +273,7 @@ export class AuthMiddleware {
       required: true,
       message: 'Authentication required. Choose one of the following methods:',
       methods,
-      details: instructions
+      details: instructions,
     };
   }
 }
