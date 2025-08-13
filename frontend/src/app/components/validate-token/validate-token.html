@@ -1,0 +1,69 @@
+@if (expired()) {
+  <div class="error mb-6 rounded-xl p-4">
+    <div class="flex items-center space-x-3">
+      <div class="text-2xl">❌</div>
+      <p class="text-muted-foreground text-sm">Token has expired</p>
+    </div>
+  </div>
+}
+
+<form
+  class="space-y-6"
+  id="tokenForm"
+  #tokenForm="ngForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="space-y-2">
+    <label for="token" class="text-foreground text-sm font-medium">
+      Enter Token from Email
+    </label>
+    <input
+      type="text"
+      id="token"
+      name="token"
+      #tokenField="ngModel"
+      [(ngModel)]="token"
+      required
+      placeholder="Enter the token from your email"
+      autocomplete="off"
+      class="border-input bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring focus:ring-offset-background flex h-12 w-full rounded-lg border px-3 py-2 text-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+      [class.border-destructive]="tokenField.invalid && tokenField.touched"
+      [class.focus:ring-destructive]="tokenField.invalid && tokenField.touched"
+    />
+    @if (tokenField.invalid && tokenField.touched) {
+      <div class="text-destructive text-sm">
+        @if (tokenField.errors?.['required']) {
+          <div>Token is required</div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="flex space-x-3">
+    <button
+      type="submit"
+      id="validateTokenButton"
+      [disabled]="tokenForm.invalid || loading()"
+      class="bg-primary hover:bg-primary/90 text-primary-foreground focus:ring-ring focus:ring-offset-background disabled:hover:bg-primary flex h-12 flex-1 cursor-pointer items-center justify-center space-x-2 rounded-lg font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      @if (loading()) {
+        <div
+          class="border-primary-foreground h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"
+        ></div>
+        <span>Validating...</span>
+      } @else {
+        <span>🔓</span>
+        <span>Validate Token</span>
+      }
+    </button>
+
+    <button
+      type="button"
+      (click)="backToEmail()"
+      class="bg-secondary hover:bg-secondary/90 text-secondary-foreground focus:ring-ring focus:ring-offset-background flex h-12 cursor-pointer items-center justify-center space-x-2 rounded-lg px-4 font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+    >
+      <span>←</span>
+      <span>Back</span>
+    </button>
+  </div>
+</form>

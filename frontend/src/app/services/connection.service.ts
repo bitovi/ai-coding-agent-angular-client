@@ -45,7 +45,7 @@ export class ConnectionService {
 
   authorize(connection: Connection) {
     this.#httpClient
-      .post<{ authUrl: string }>(`/api/mcp/${connection.name}/authorize`, {})
+      .post<{ authUrl: string }>(`/mcp/${connection.name}/authorize`, {})
       .pipe(
         catchError((err) => {
           this.error.set(err.message);
