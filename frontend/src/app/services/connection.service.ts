@@ -6,7 +6,7 @@ import { EMPTY, catchError, finalize, take } from 'rxjs';
 import {
   Connection,
   ConnectionResponse,
-} from '../components/connections/models/connection';
+} from '../components/connections/models/connection-model';
 
 @Injectable({
   providedIn: 'root',

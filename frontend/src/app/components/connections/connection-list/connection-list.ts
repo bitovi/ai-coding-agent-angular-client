@@ -13,7 +13,7 @@ import {
 import { faLink, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { ConnectionService } from '../../../services/connection.service';
-import { Connection } from '../models/connection';
+import { Connection } from '../models/connection-model';
 
 @Component({
   selector: 'app-connection-list',

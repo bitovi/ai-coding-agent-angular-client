@@ -1,0 +1,8 @@
+<app-prompt-header></app-prompt-header>
+
+@let prompt = promptValue();
+
+@if (prompt) {
+  <app-prompt-details [prompt]="prompt"></app-prompt-details>
+  <app-prompt-executor [prompt]="prompt"></app-prompt-executor>
+}

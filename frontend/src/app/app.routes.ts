@@ -31,6 +31,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
+      {
+        path: 'prompts/:promptName/activity',
+        loadComponent: () =>
+          import('./pages/prompt-activity/prompt-activity').then(
+            (m) => m.PromptActivity
+          ),
+      },
     ],
   },
 ];

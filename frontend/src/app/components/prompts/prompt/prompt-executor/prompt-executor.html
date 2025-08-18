@@ -1,0 +1,38 @@
+<div class="bg-card text-card-foreground mb-8 rounded-xl border p-8 shadow">
+  <div class="mb-6 flex items-center gap-4">
+    <div class="flex items-center space-x-2">
+      <fa-icon [icon]="['far', 'clipboard']"></fa-icon>
+      <h2
+        class="flex items-center gap-2 leading-none font-semibold tracking-tight"
+      >
+        Run Prompt
+      </h2>
+    </div>
+  </div>
+  <div class="flex flex-col space-y-4">
+    <label className="block text-sm font-medium mb-2">Parameters (JSON):</label>
+    <textarea
+      placeholder="Enter parameters as JSON..."
+      rows="6"
+      class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[80px] w-full rounded-md border px-3 py-2 font-mono text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+    ></textarea>
+    <p className="text-xs text-muted-foreground mt-1">
+      💡 Tip: Parameters will be substituted into the prompt messages using
+      syntax
+    </p>
+  </div>
+  <div class="mt-2 flex gap-2">
+    <button
+      class="focus-visible:ring-ring [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 flex h-9 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+    >
+      <fa-icon [icon]="['far', 'circle-play']"></fa-icon>
+      Run with Parameters!
+    </button>
+    <button
+      class="focus-visible:ring-ring [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border-input bg-background hover:bg-accent hover:text-accent-foreground flex h-9 items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+    >
+      <fa-icon [icon]="['far', 'eye']"></fa-icon>
+      Preview
+    </button>
+  </div>
+</div>

@@ -5,6 +5,7 @@ export interface PromptResponse {
 export interface Prompt {
   name: string;
   messages: Message[];
+  mcp_servers?: any[];
   canRun: boolean;
   connections: Connection[];
 }

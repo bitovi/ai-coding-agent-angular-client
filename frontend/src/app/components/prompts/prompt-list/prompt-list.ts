@@ -1,13 +1,6 @@
 import { SlicePipe } from '@angular/common';
 import { httpResource } from '@angular/common/http';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  computed,
-  effect,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import {
@@ -16,8 +9,8 @@ import {
 } from '@fortawesome/angular-fontawesome';
 import { faClipboard } from '@fortawesome/free-regular-svg-icons';
 
-import { ConnectionResponse } from '../../connections/models/connection';
-import { PromptResponse } from '../models/prompt';
+import { ConnectionResponse } from '../../connections/models/connection-model';
+import { PromptResponse } from '../models/prompt-model';
 
 @Component({
   selector: 'app-prompt-list',
@@ -33,11 +26,9 @@ export class PromptList {
   promptsWithConnections = computed(() => {
     const prompts = this.promptsRef.value();
     const connections = this.connectionsRef.value();
-
-    console.log(prompts, connections);
   });
 
-  constructor(library: FaIconLibrary) {
-    library.addIcons(faClipboard);
+  constructor(private readonly library: FaIconLibrary) {
+    this.library.addIcons(faClipboard);
   }
 }

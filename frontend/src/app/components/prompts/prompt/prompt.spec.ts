@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValidateToken } from './validate-token';
+import { Prompt } from './prompt';
 
-describe('ValidateToken', () => {
-  let component: ValidateToken;
-  let fixture: ComponentFixture<ValidateToken>;
+describe('Prompt', () => {
+  let component: Prompt;
+  let fixture: ComponentFixture<Prompt>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ValidateToken]
+      imports: [Prompt]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ValidateToken);
+    fixture = TestBed.createComponent(Prompt);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
